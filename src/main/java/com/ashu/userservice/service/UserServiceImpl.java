@@ -5,6 +5,7 @@ import com.ashu.userservice.entity.Rating;
 import com.ashu.userservice.entity.User;
 import com.ashu.userservice.exceptions.ResourceNotFoundException;
 import com.ashu.userservice.external.services.HotelService;
+import com.ashu.userservice.external.services.RatingService;
 import com.ashu.userservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService{
     private RestTemplate restTemplate;
     @Autowired
     private HotelService hotelService;
+    @Autowired
+    private RatingService ratingService;
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -45,10 +48,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUser(String userId) {
         User user =  userRepository.findById(userId).orElseThrow(() ->new ResourceNotFoundException("This user not found!! : "+userId));
-        String ratingUrl = "http://RATING-SERVICE/ratings/users/";
-        Rating[]  ratings = restTemplate.getForObject(ratingUrl+ userId,Rating[].class);
-        logger.info("{}"+ratings);
-        List<Rating> ratingList = Arrays.asList(ratings);
+        //String ratingUrl = "http://RATING-SERVICE/ratings/users/";
+        //Rating[]  ratings = restTemplate.getForObject(ratingUrl+ userId,Rating[].class);
+        //logger.info("{}"+ratings);
+        //List<Rating> ratingList = Arrays.asList(ratings);
+        List<Rating> ratingList = ratingService.getAllRatings().getBody();
         ratingList.stream().map(rating -> {
             String hotelId = rating.getHotelId();
             //String hotelUrl = "http://HOTEL-SERVICE/hotels/" + hotelId;
