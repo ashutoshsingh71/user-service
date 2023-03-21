@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -26,7 +27,7 @@ public class UserController {
          return ResponseEntity.status(HttpStatus.OK).body(usersList);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<User> getUser(@PathVariable String userId){
         User retrievedUser = userService.getUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(retrievedUser);
@@ -38,9 +39,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PutMapping("/add")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        User updatedUser = userService.updateUser(user);
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable String userId,@RequestBody User user){
+        User updatedUser = userService.updateUser(userId,user);
         return ResponseEntity.ok(updatedUser);
     }
 }

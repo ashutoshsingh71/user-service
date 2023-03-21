@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUser(User user) {
-        String uId = user.getUserId();
-        User targetUser = userRepository.findById(uId).orElse(null);
+    public User updateUser(String userId,User user) {
+        //String uId = user.getUserId();
+        User targetUser = userRepository.findById(userId).orElse(null);
         if(targetUser == null){
             targetUser = addUser(user);
         }else{
